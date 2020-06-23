@@ -2,17 +2,17 @@
 <html dir="ltr" lang="en-US">
     <head>
         <meta charset="utf-8" />
-        <title>questions about network packets</title>
+        <title>questions about floating point numbers</title>
         <link rel="stylesheet" href="style.css"> 
         <link rel="stylesheet" href="wickedcss.min.css"> 
         <link href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap" rel="stylesheet"> 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="script.js"> </script>
-        <meta name="author" content="Julia Evans"/>
-        <meta name="date" content="2020-06-08"/>
+        <meta name="author" content="Ian Sheret"/>
+        <meta name="date" content="2020-06-23"/>
     </head>
     <body>
-        <h1>example question template</h1>
+        <h1>floating point numbers</h1>
         <div class="container">
             <div id="buttons">
                 <p>
@@ -30,19 +30,15 @@
 <div class="row">
     <div class="question">
         <h3>
-            here's a question
+            Can 0.1 be exactly represented in a floating point number?
         </h3>
     </div>
     <div class="answer">
         <h3>
-            here's an answer!
+            Nope!
         </h3>
         <p>
-        some details about the answer
-
-        </p>
-        <p>
-        <code> $ a command </code>
+        Numbers like 0.1 and 0.3 have nice representations in decimal numbers, but no exact match in binary. They will get approximated to the nearest available representation.
         </p>
     </div>
 </div>
@@ -50,19 +46,143 @@
 <div class="row">
     <div class="question">
         <h3>
-            here's another question
+            Can 4.25 be exactly represented in a floating point number?
         </h3>
     </div>
     <div class="answer">
         <h3>
-            here's another answer!
+            Yes!
         </h3>
         <p>
-        some details about the answer
-
+        That one happens to have an exact binary representation: 100.01. More generally, fractions where denominator is a power-of-two can be represented exactly with a float, e.g. 1/2, 3/4, 7/32.
         </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="question">
+        <h3>
+            When working with floats, does 0.1 + 0.2 equal 0.3?
+        </h3>
+    </div>
+    <div class="answer">
+        <h3>
+            Nope!
+        </h3>
         <p>
-        <code> $ another command </code>
+        None of these numbers has an exact representation in binary, so each will be rounded to the nearest available representation. When the addition of 0.1 and 0.2 is done, these rounding errors combine to give a result which is not the closest available approximation to 0.3.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="question">
+        <h3>
+            Do I have to accept floating point calculations are always 'fuzzy' and have some un-knowable rounding error on them?
+        </h3>
+    </div>
+    <div class="answer">
+        <h3>
+            No, you don't!
+        </h3>
+        <p>
+        The floating point standard (IEEE 754) specifies 'exact rounding' on basic operations (addition, subtraction, multiplication, division). On these operations, you're guaranteed to get be given the approximation which is closest to the true value!
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="question">
+        <h3>
+            If my calculation only involves integers, am I guaranteed to get the exact result?
+        </h3>
+    </div>
+    <div class="answer">
+        <h3>
+            Not quite!
+        </h3>
+        <p>
+        The rounding rules usually give exact results for integers, but if at any stage you have a number too big to exactly store in a float, you'll get roundoff error.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="question">
+        <h3>
+            If I call sqrt(x), am I certain the answer will be exactly rounded?
+        </h3>
+    </div>
+    <div class="answer">
+        <h3>
+            Yes!
+        </h3>
+        <p>
+        Just like the basic arithmetic operations, square root is guaranteed to give the closest available approximation to the true result!
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="question">
+        <h3>
+            If I call sin(x), am I certain the answer will exactly rounded?
+        </h3>
+    </div>
+    <div class="answer">
+        <h3>
+            Nope!
+        </h3>
+        <p>
+        Functions like sin, cos, log, etc. are implementation dependent. Depending on your implementation, you could get very good or very poor accuracy. The only function with exact rounding is sqrt().
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="question">
+        <h3>
+            If I have a calculation involving several basic operations (e.g. a*b + c*d), will I get an exactly rounded result?
+        </h3>
+    </div>
+    <div class="answer">
+        <h3>
+            Nope!
+        </h3>
+        <p>
+        The exact rounding guarantee applies to the individual add and multiply operations. When a bunch of these are combined, you get multiple roundings, and the final answer is not guaranteed to be the closest available approximation to the true result.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="question">
+        <h3>
+            On modern hardware, do basic floating point calculations follow IEEE 754 rounding rules?
+        </h3>
+    </div>
+    <div class="answer">
+        <h3>
+            It depends!
+        </h3>
+        <p>
+        Some languages (e.g. C and C++) don't promise this, and special (non-default) compiler settings are needed if you want rounding follow IEEE 754 rules.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="question">
+        <h3>
+            I really need exact rounding on a complicated calculation - is that possible?
+        </h3>
+    </div>
+    <div class="answer">
+        <h3>
+            Yes!
+        </h3>
+        <p>
+        There are dedicated methods and software libraries for doing this; check out 'arbitrary precision arithmetic'. It's usually a lot slower than using standard floating point numbers though.
         </p>
     </div>
 </div>
